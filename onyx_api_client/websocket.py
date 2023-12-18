@@ -41,19 +41,19 @@ class OnyxWebsocketClient:
             dict(
                 id=self.new_id(),
                 method="subscribe",
-                payload=dict(channel=channel, **kwargs),
+                channel=channel,
             )
         )
 
     def auth_msg(self):
-        return dict(id=self.new_id(), method="auth", payload=dict(token=self.api_token))
+        return dict(id=self.new_id(), method="auth", token=self.api_token)
 
     def send(self, msg: dict):
         self.queue.put_nowait(msg)
 
-    def new_id(self):
+    def new_id(self) -> str:
         self.msg_id += 1
-        return self.msg_id
+        return f"msg:{self.msg_id}"
 
     async def run(self):
         self._write_task = asyncio.create_task(self.write_loop())

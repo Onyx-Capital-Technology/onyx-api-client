@@ -10,9 +10,7 @@ Rest and websocket API client
 {
   "id": "<integer>",
   "method": "auth",
-  "payload": {
-    "token": "API token",
-  }
+  "token": "API token",
 }
 ```
 
@@ -23,8 +21,15 @@ Rest and websocket API client
 {
   "id": "<integer>",
   "method": "subscribe",
-  "payload": {
-    "channel": "<string>",
-  }
+  "channel": "<string>",
 }
 ```
+
+* Subscribe to `server_info` channel to receive server info updates
+  ```json
+  {
+    "id": "<integer>",
+    "method": "subscribe",
+    "channel": "server_info",
+  }
+  ```
