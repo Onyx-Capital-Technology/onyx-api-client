@@ -37,6 +37,8 @@ class OnyxWebsocketClient:
     msg_id: int = 0
 
     def subscribe(self, channel: str, **kwargs: Any):
+        if channel == "tickers":
+            channel = dict(tickers=kwargs)
         self.send(
             dict(
                 id=self.new_id(),
@@ -74,7 +76,7 @@ class OnyxWebsocketClient:
                         data = msg.json()
                         if "method" in data:
                             self.on_response(self, data)
-                        elif "event" in data:
+                        elif "channel" in data:
                             self.on_event(self, data)
                         else:
                             logger.warn(f"received unknown message: {data}")
