@@ -1,8 +1,8 @@
-# api-client
+# Onyx API Client
 Rest and websocket API client
 
 
-## JSON Protocol
+## Websocket JSON Protocol
 
 The websocket API uses JSON for all requests and responses. All requests must
 include
