@@ -36,7 +36,7 @@ class Workflow:
             self.tickers = True
             # cli.subscribe("tickers", product_groups=["crude"])
             cli.subscribe(
-                "tickers", products=["brteusw1"], product_groups=["crude1", "foo"]
+                "tickers1", products=["brteusw1"], product_groups=["crude1", "foo"]
             )
 
 
