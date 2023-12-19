@@ -10,7 +10,7 @@ include
 * an `id` string which can be used to correlate requests with responses
 * a `method` string which indicates the type of request
 
-All requests will receive a response back from the server, with the same `id` and `method` as the request, provided the `method` is valid. If the `method` is invalid, the server will respond with an error.
+All requests will receive a response back from the server, with the same `id` and `method` as the request, provided the `method` is valid. If the `method` is invalid, the server will terminate the connection without response.
 
 A valid request, that is a request with a valid method, will receive a response with the following schema
 
@@ -75,3 +75,80 @@ if the `error` flag is `true`, the `message` field will contain the error messag
     "channel":"dashboards"
   }
   ```
+
+### Streaming Events
+
+The server will send events to the client as thay occur if the client is subscribed to the corresponding channel.
+
+An avent payload is a JSON object with the following schema
+
+```json
+{
+  "channel": "<string>",
+  "message": "<object>"
+}
+```
+
+#### Server Info Event
+
+```json
+{
+  "channel": "server_info",
+  "message": {
+    "uid": "<string>",
+    "timestamp": "<date iso-format string>",
+    "age_millis": "<number>",
+  }
+}
+```
+
+The `uid` is the unique identifier for the websocket connection. The `timestamp` is the UTC time when the server sent the event. The `age_millis` is the number of milliseconds since the websocket connection was established.
+
+
+#### Dashboards Event
+
+
+```json
+{
+  "channel": "dashboards",
+  "message": "<dashboard object or list of dashboard objects>"
+}
+```
+
+The first event after subscribing to the `dashboards` channel will be the full state of the user dashboards.
+
+```json
+{
+  "channel": "dashboards",
+  "message": ["<dashboard object>"]
+}
+```
+
+Subsequent events will be incremental updates to the user dashboards.
+
+```json
+{
+  "channel": "dashboards",
+  "message": "<dashboard object>"
+}
+```
+
+#### Tickers Event
+
+```json
+{
+  "channel": "tickers",
+  "message": {
+    "symbol": "<string>",
+    "timestamp_millis": "<integer>",
+    "bid": {
+      "price": "<string>",
+      "amount": "<string>",
+    },
+    "ask": {
+      "price": "<string>",
+      "amount": "<string>",
+    },
+  }
+}
+```
