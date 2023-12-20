@@ -1,8 +1,9 @@
-from onyx_api_client.websocket import OnyxWebsocketClient
 import asyncio
-import dotenv
 import logging
 
+import dotenv
+
+from onyx_api_client.websocket import OnyxWebsocketClient
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +36,7 @@ class Workflow:
         if not self.tickers:
             self.tickers = True
             # cli.subscribe("tickers", product_groups=["crude"])
-            cli.subscribe(
-                "tickers", products=["brteusw"]
-            )
+            cli.subscribe("tickers", products=["brteusw"])
 
 
 if __name__ == "__main__":

@@ -1,22 +1,21 @@
 from __future__ import annotations
 
 import asyncio
-from aiohttp import ClientSession, ClientWebSocketResponse, WSMsgType
-from dataclasses import dataclass, field
-from typing import Callable, Any
-import os
-
 import logging
+import os
+from dataclasses import dataclass, field
+from typing import Any, Callable
 
+from aiohttp import ClientSession, ClientWebSocketResponse, WSMsgType
 
 logger = logging.getLogger(__name__)
 
 
-def on_response(cli: OnyxWebsocketClient, data: dict):
+def on_response(cli: OnyxWebsocketClient, data: dict) -> None:
     logger.info("received response: %s", data)
 
 
-def on_event(cli: OnyxWebsocketClient, data: dict):
+def on_event(cli: OnyxWebsocketClient, data: dict) -> None:
     logger.info("received event: %s", data)
 
 
@@ -25,7 +24,7 @@ class OnyxWebsocketClient:
     api_token: str = field(default_factory=lambda: os.getenv("ONYX_API_TOKEN", ""))
     ws_url: str = field(
         default_factory=lambda: os.getenv(
-            "ONYX_WS_URL", "wss://ws.dev.onyxhub.co/stream"
+            "ONYX_WS_URL", "wss://ws.dev.onyxhub.co/stream/v1"
         )
     )
     ws: ClientWebSocketResponse | None = None
@@ -36,35 +35,34 @@ class OnyxWebsocketClient:
     _write_task: asyncio.Task | None = None
     msg_id: int = 0
 
-    def subscribe(self, channel: str, **kwargs: Any):
-        if channel == "tickers":
-            channel = dict(tickers=kwargs)
+    def subscribe(self, channel: str, **kwargs: Any) -> None:
+        channel_data = dict(tickers=kwargs) if channel == "tickers" else channel
         self.send(
             dict(
                 id=self.new_id(),
                 method="subscribe",
-                channel=channel,
+                channel=channel_data,
             )
         )
 
-    def auth_msg(self):
+    def auth_msg(self) -> dict:
         return dict(id=self.new_id(), method="auth", token=self.api_token)
 
-    def send(self, msg: dict):
+    def send(self, msg: dict) -> None:
         self.queue.put_nowait(msg)
 
     def new_id(self) -> str:
         self.msg_id += 1
         return f"msg:{self.msg_id}"
 
-    async def run(self):
+    async def run(self) -> None:
         self._write_task = asyncio.create_task(self.write_loop())
         try:
             await self.read_loop()
         finally:
             self._write_task.cancel()
 
-    async def read_loop(self):
+    async def read_loop(self) -> None:
         async with ClientSession() as session:
             logger.info("connecting with %s", self.ws_url)
             async with session.ws_connect(self.ws_url) as ws:
@@ -87,7 +85,7 @@ class OnyxWebsocketClient:
                         logger.info(f"unhandled message type: {msg.type}")
                         break
 
-    async def write_loop(self):
+    async def write_loop(self) -> None:
         while True:
             msg = await self.queue.get()
             if self.ws:

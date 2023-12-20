@@ -20,3 +20,12 @@ mypy = "^1.7.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = ["E", "W", "F", "I", "B", "N"]
+line-length = 88
+
+[tool.mypy]
+disallow_untyped_calls = false
+disallow_untyped_defs = true
+warn_no_return = true
