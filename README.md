@@ -138,17 +138,19 @@ Subsequent events will be incremental updates to the user dashboards.
 ```json
 {
   "channel": "tickers",
-  "message": {
-    "symbol": "<string>",
-    "timestamp_millis": "<integer>",
-    "bid": {
-      "price": "<string>",
-      "amount": "<string>",
-    },
-    "ask": {
-      "price": "<string>",
-      "amount": "<string>",
-    },
-  }
+  "message": [
+    {
+      "symbol": "<string>",
+      "timestamp_millis": "<integer>",
+      "bid": {
+        "price": "<string>",
+        "amount": "<string>",
+      },
+      "ask": {
+        "price": "<string>",
+        "amount": "<string>",
+      },
+    }
+  ]
 }
 ```

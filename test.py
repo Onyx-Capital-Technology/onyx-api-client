@@ -35,7 +35,7 @@ class Workflow:
             cli.subscribe("dashboards")
         if not self.tickers:
             self.tickers = True
-            # cli.subscribe("tickers", product_groups=["crude"])
+            # cli.subscribe("tickers", product_groups=["crude", "distillate", "gasoline"])
             cli.subscribe("tickers", products=["brteusw"])
 
 
