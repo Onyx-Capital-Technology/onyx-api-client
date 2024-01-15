@@ -85,9 +85,17 @@ An avent payload is a JSON object with the following schema
 ```json
 {
   "channel": "<string>",
-  "message": "<object>"
+  "message": "<object>",
+  "message_type": "<int>"
 }
 ```
+
+where `channel` is the channel that produced the message, `message_type` is an integer that indicates the type of message, and `message` is the message payload.
+The type of message can be
+* 0 - not specified
+* 1 - update
+* 2 - create
+* 3 - delete
 
 #### Server Info Event
 
@@ -98,7 +106,8 @@ An avent payload is a JSON object with the following schema
     "uid": "<string>",
     "timestamp": "<date iso-format string>",
     "age_millis": "<number>",
-  }
+  },
+  "message_type": 0
 }
 ```
 
@@ -111,7 +120,8 @@ The `uid` is the unique identifier for the websocket connection. The `timestamp`
 ```json
 {
   "channel": "dashboards",
-  "message": "<dashboard object or list of dashboard objects>"
+  "message": "<dashboard object or list of dashboard objects>",
+  "message_type": "<int>"
 }
 ```
 
@@ -120,7 +130,8 @@ The first event after subscribing to the `dashboards` channel will be the full s
 ```json
 {
   "channel": "dashboards",
-  "message": ["<dashboard object>"]
+  "message": ["<dashboard object>"],
+  "message_type": 0
 }
 ```
 
@@ -129,7 +140,8 @@ Subsequent events will be incremental updates to the user dashboards.
 ```json
 {
   "channel": "dashboards",
-  "message": "<dashboard object>"
+  "message": "<dashboard object>",
+  "message_type": 1 | 2 | 3
 }
 ```
 
@@ -150,7 +162,8 @@ Subsequent events will be incremental updates to the user dashboards.
         "price": "<string>",
         "amount": "<string>",
       },
-    }
-  ]
+    },
+  ],
+  "message_type": 1
 }
 ```
