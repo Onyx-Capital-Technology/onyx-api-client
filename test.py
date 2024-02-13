@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 from dataclasses import dataclass, field
 
@@ -13,29 +14,25 @@ logger = logging.getLogger(__name__)
 class Workflow:
     products: list[str] = field(default_factory=list)
     dashboard: bool = False
-    _dashboard: bool = False
-    _tickers: bool = False
+    server_info: bool = False
 
     def on_response(self, cli: OnyxWebsocketClient, data: dict):
         if data["method"] == "auth":
             if data.get("error"):
                 raise RuntimeError(data["message"])
-            else:
-                logger.info("authenticated - subscribe to server_info")
+            if self.server_info:
                 cli.subscribe("server_info")
+            if self.dashboard:
+                cli.subscribe("dashboards")
+            if self.products:
+                cli.subscribe("tickers", products=self.products)
 
     def on_event(self, cli: OnyxWebsocketClient, data: dict):
         if data.get("channel") == "tickers":
             for message in data.get("message", ()):
                 logger.info("symbol: %s - price %s", message["symbol"], message["mid"])
         elif data.get("channel") == "server_info":
-            logger.info("server info: %s", data)
-        if not self._dashboard and self.dashboard:
-            self.dashboard = True
-            cli.subscribe("dashboards")
-        if not self._tickers and self.products:
-            self._tickers = True
-            cli.subscribe("tickers", products=["brtspr"])
+            logger.info("%s", json.dumps(data, indent=2))
 
 
 async def test_websocket(workflow: Workflow):
