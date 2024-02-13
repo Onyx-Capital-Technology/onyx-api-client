@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from dataclasses import dataclass, field
 
 import dotenv
 
@@ -8,17 +9,12 @@ from onyx_api_client.websocket import OnyxWebsocketClient
 logger = logging.getLogger(__name__)
 
 
-async def test_websocket():
-    workflow = Workflow()
-    client = OnyxWebsocketClient(
-        on_response=workflow.on_response, on_event=workflow.on_event
-    )
-    await client.run()
-
-
+@dataclass
 class Workflow:
+    products: list[str] = field(default_factory=list)
     dashboard: bool = False
-    tickers: bool = False
+    _dashboard: bool = False
+    _tickers: bool = False
 
     def on_response(self, cli: OnyxWebsocketClient, data: dict):
         if data["method"] == "auth":
@@ -29,17 +25,28 @@ class Workflow:
                 cli.subscribe("server_info")
 
     def on_event(self, cli: OnyxWebsocketClient, data: dict):
-        logger.info("received event: %s", data)
-        if not self.dashboard:
+        if data.get("channel") == "tickers":
+            for message in data.get("message", ()):
+                logger.info("symbol: %s - price %s", message["symbol"], message["mid"])
+        elif data.get("channel") == "server_info":
+            logger.info("server info: %s", data)
+        if not self._dashboard and self.dashboard:
             self.dashboard = True
             cli.subscribe("dashboards")
-        if not self.tickers:
-            self.tickers = True
-            # cli.subscribe("tickers", product_groups=["crude", "distillate", "gasoline"])
-            cli.subscribe("tickers", products=["brteusw"])
+        if not self._tickers and self.products:
+            self._tickers = True
+            cli.subscribe("tickers", products=["brtspr"])
+
+
+async def test_websocket(workflow: Workflow):
+    client = OnyxWebsocketClient(
+        on_response=workflow.on_response, on_event=workflow.on_event
+    )
+    await client.run()
 
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
     logging.basicConfig(level=logging.DEBUG)
-    asyncio.get_event_loop().run_until_complete(test_websocket())
+    workflow = Workflow(products=["ebob"])
+    asyncio.get_event_loop().run_until_complete(test_websocket(workflow))

@@ -45,6 +45,16 @@ class OnyxWebsocketClient:
             )
         )
 
+    def unsubscribe(self, channel: str, **kwargs: Any) -> None:
+        channel_data = dict(tickers=kwargs) if channel == "tickers" else channel
+        self.send(
+            dict(
+                id=self.new_id(),
+                method="unsubscribe",
+                channel=channel_data,
+            )
+        )
+
     def auth_msg(self) -> dict:
         return dict(id=self.new_id(), method="auth", token=self.api_token)
 

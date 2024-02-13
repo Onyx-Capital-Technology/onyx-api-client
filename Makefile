@@ -12,3 +12,8 @@ install:			## install main python dependencies via poetry
 .PHONY: lint
 lint:				## run linters
 	@poetry run ./lint fix
+
+
+.PHONY: test
+test:				## run tests
+	@poetry run pytest
