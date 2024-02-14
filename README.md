@@ -61,7 +61,7 @@ if the `error` flag is `true`, the `message` field will contain the error messag
     "method": "subscribe",
     "channel": {
       "tickers": {
-        "product_groups": ["crude"]
+        "products": ["brt", "ebob"]
       }
     }
   }
@@ -154,6 +154,7 @@ Subsequent events will be incremental updates to the user dashboards.
     {
       "symbol": "<string>",
       "timestamp_millis": "<integer>",
+      "mid": "<string>",
       "bid": {
         "price": "<string>",
         "amount": "<string>",
