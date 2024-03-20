@@ -24,7 +24,7 @@ class OnyxWebsocketClient:
     api_token: str = field(default_factory=lambda: os.getenv("ONYX_API_TOKEN", ""))
     ws_url: str = field(
         default_factory=lambda: os.getenv(
-            "ONYX_WS_URL", "wss://ws.dev.onyxhub.co/stream/v1"
+            "ONYX_WS_URL", "wss://ws.onyxhub.co/stream/v1"
         )
     )
     ws: ClientWebSocketResponse | None = None
@@ -36,7 +36,7 @@ class OnyxWebsocketClient:
     msg_id: int = 0
 
     def subscribe(self, channel: str, **kwargs: Any) -> None:
-        channel_data = dict(tickers=kwargs) if channel == "tickers" else channel
+        channel_data = {channel: kwargs} if kwargs else channel
         self.send(
             dict(
                 id=self.new_id(),
@@ -46,7 +46,7 @@ class OnyxWebsocketClient:
         )
 
     def unsubscribe(self, channel: str, **kwargs: Any) -> None:
-        channel_data = dict(tickers=kwargs) if channel == "tickers" else channel
+        channel_data = {channel: kwargs} if kwargs else channel
         self.send(
             dict(
                 id=self.new_id(),
@@ -94,6 +94,7 @@ class OnyxWebsocketClient:
                     else:
                         logger.info(f"unhandled message type: {msg.type}")
                         break
+            logger.warn("exiting read loop")
 
     async def write_loop(self) -> None:
         while True:

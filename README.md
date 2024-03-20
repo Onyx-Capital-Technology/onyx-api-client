@@ -76,6 +76,38 @@ if the `error` flag is `true`, the `message` field will contain the error messag
   }
   ```
 
+* Subscribe to an `rfq` (request for quote) stream, only if the user has the required trading permissions.
+
+  * `RFQ` for an outright
+    ```json
+    {
+      "id": "<string>",
+      "method": "subscribe",
+      "channel": {
+        "rfq": {
+          "symbol": "brtu24",
+          "size": 10,
+        }
+      }
+    }
+    ```
+  * `RFQ` for a spread
+    ```json
+    {
+      "id": "<string>",
+      "method": "subscribe",
+      "channel": {
+        "rfq": {
+          "symbol": {
+            "front": "brtu24",
+            "back": "brtz24",
+          },
+          "size": 10,
+        }
+      }
+    }
+    ```
+
 ### Streaming Events
 
 The server will send events to the client as thay occur if the client is subscribed to the corresponding channel.
@@ -153,6 +185,7 @@ Subsequent events will be incremental updates to the user dashboards.
   "message": [
     {
       "symbol": "<string>",
+      "product_symbol": "<string>",
       "timestamp_millis": "<integer>",
       "mid": "<string>",
       "bid": {

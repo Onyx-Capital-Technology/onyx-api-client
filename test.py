@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 
 import dotenv
 
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Workflow:
     products: list[str] = field(default_factory=list)
+    rfq: list[dict] = field(default_factory=list)
     dashboard: bool = False
     server_info: bool = False
 
@@ -26,11 +28,25 @@ class Workflow:
                 cli.subscribe("dashboards")
             if self.products:
                 cli.subscribe("tickers", products=self.products)
+            if self.rfq:
+                for kwargs in self.rfq:
+                    cli.subscribe("rfq", **kwargs)
+        else:
+            logger.info("%s", json.dumps(data, indent=2))
 
     def on_event(self, cli: OnyxWebsocketClient, data: dict):
         if data.get("channel") == "tickers":
-            for message in data.get("message", ()):
-                logger.info("symbol: %s - price %s", message["symbol"], message["mid"])
+            tickers = data.get("message", ())
+            for ticker in tickers:
+                timestamp = datetime.fromtimestamp(
+                    0.001 * ticker["timestamp_millis"], tz=timezone.utc
+                )
+                logger.info(
+                    "%s - %s - %s",
+                    ticker["symbol"],
+                    timestamp.isoformat(),
+                    ticker["mid"],
+                )
         elif data.get("channel") == "server_info":
             logger.info("%s", json.dumps(data, indent=2))
 
@@ -45,5 +61,10 @@ async def test_websocket(workflow: Workflow):
 if __name__ == "__main__":
     dotenv.load_dotenv()
     logging.basicConfig(level=logging.DEBUG)
-    workflow = Workflow(products=["ebob"])
+    workflow = Workflow(
+        rfq=[
+            dict(symbol="brtz24", size="10"),
+            dict(symbol=dict(front="brtu24", back="brtz24"), size="50"),
+        ]
+    )
     asyncio.get_event_loop().run_until_complete(test_websocket(workflow))
