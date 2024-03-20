@@ -201,3 +201,27 @@ Subsequent events will be incremental updates to the user dashboards.
   "message_type": 1
 }
 ```
+
+#### RFQ Event
+
+```json
+{
+  "channel": "tickers",
+  "message": [
+    {
+      "symbol": "<string/Spread/Butterfly>",
+      "product_symbol": "<string>",
+      "timestamp_millis": "<integer>",
+      "bid": {
+        "price": "<string>",
+        "amount": "<string>",
+      },
+      "ask": {
+        "price": "<string>",
+        "amount": "<string>",
+      },
+    },
+  ],
+  "message_type": 1
+}
+```

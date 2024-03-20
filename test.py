@@ -35,20 +35,33 @@ class Workflow:
             logger.info("%s", json.dumps(data, indent=2))
 
     def on_event(self, cli: OnyxWebsocketClient, data: dict):
-        if data.get("channel") == "tickers":
-            tickers = data.get("message", ())
-            for ticker in tickers:
-                timestamp = datetime.fromtimestamp(
-                    0.001 * ticker["timestamp_millis"], tz=timezone.utc
-                )
-                logger.info(
-                    "%s - %s - %s",
-                    ticker["symbol"],
-                    timestamp.isoformat(),
-                    ticker["mid"],
-                )
-        elif data.get("channel") == "server_info":
-            logger.info("%s", json.dumps(data, indent=2))
+        channel = data.get("channel")
+        match channel:
+            case "tickers":
+                for ticker in data.get("message", ()):
+                    timestamp = datetime.fromtimestamp(
+                        0.001 * ticker["timestamp_millis"], tz=timezone.utc
+                    )
+                    logger.info(
+                        "%s - %s - %s",
+                        ticker["symbol"],
+                        timestamp.isoformat(),
+                        ticker["mid"],
+                    )
+            case "rfq":
+                for rfq in data.get("message", ()):
+                    timestamp = datetime.fromtimestamp(
+                        0.001 * rfq["timestamp_millis"], tz=timezone.utc
+                    )
+                    logger.info(
+                        "%s - %s - bid %s - ask %s",
+                        rfq["symbol"],
+                        timestamp.isoformat(),
+                        rfq["bid"],
+                        rfq["ask"],
+                    )
+            case "server_info":
+                logger.info("%s", json.dumps(data, indent=2))
 
 
 async def test_websocket(workflow: Workflow):
