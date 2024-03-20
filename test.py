@@ -64,7 +64,7 @@ if __name__ == "__main__":
     workflow = Workflow(
         rfq=[
             dict(symbol="brtz24", size="10"),
-            dict(symbol=dict(front="brtu24", back="brtz24"), size="50"),
+            dict(symbol=dict(front="brtu24", back="brtz24"), size=50),
         ]
     )
     asyncio.get_event_loop().run_until_complete(test_websocket(workflow))
