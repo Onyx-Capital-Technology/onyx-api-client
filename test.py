@@ -75,9 +75,10 @@ if __name__ == "__main__":
     dotenv.load_dotenv()
     logging.basicConfig(level=logging.DEBUG)
     workflow = Workflow(
-        rfq=[
-            dict(symbol="brtz24", size="10"),
-            dict(symbol=dict(front="brtu24", back="brtz24"), size=50),
-        ]
+        #rfq=[
+        #    dict(symbol="brtz24", size="10"),
+        #    dict(symbol=dict(front="brtu24", back="brtz24"), size=50),
+        #]
+        products=["dub"],
     )
     asyncio.get_event_loop().run_until_complete(test_websocket(workflow))

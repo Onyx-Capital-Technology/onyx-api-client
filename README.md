@@ -108,6 +108,45 @@ if the `error` flag is `true`, the `message` field will contain the error messag
     }
     ```
 
+### Unsubscribe Request
+
+To unsubscribe from  `dashboards` and `server_info` channels, send the following request
+
+```json
+{
+  "id": "<string>",
+  "method": "unsubscribe",
+  "channel": "<string>",
+}
+```
+
+To unsubscribe from  `tickers` channels, send the following request
+
+```json
+{
+  "id": "<string>",
+  "method": "unsubscribe",
+  "channel": "tickers": {
+    "products": ["ebob"]
+  }
+}
+```
+
+To unsubscribe from  `rfq` channels, send the following request
+
+```json
+{
+  "id": "<string>",
+  "method": "unsubscribe",
+  "channel": "rfq": {
+    "symbol": {
+      "front": "brtu24",
+      "back": "brtz24",
+    },
+  }
+}
+```
+
 ### Streaming Events
 
 The server will send events to the client as thay occur if the client is subscribed to the corresponding channel.
@@ -225,3 +264,23 @@ Subsequent events will be incremental updates to the user dashboards.
   "message_type": 1
 }
 ```
+
+### Place Order Request
+
+To place an order for a given rfq stream, send the following request
+
+```json
+{
+  "id": "<string>",
+  "method": "order",
+  "symbol": "<string/Spread/Butterfly>",
+  "side": "buy" | "sell",
+  "amount": "<string>",
+  "price": "<string>",
+  "timestamp_millis": "<unsigned integer>",
+  "client_order_id": "<optional string>",
+}
+```
+
+* The `client_order_id` is optional, if provided it must be unique
+* The `timestamp_millis` is the UTC time when the order was placed by the client, used for rejecting orders that are too old due to network latency.
