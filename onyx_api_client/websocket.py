@@ -65,6 +65,15 @@ class OnyxWebsocketClient:
         self.msg_id += 1
         return f"msg:{self.msg_id}"
 
+    def place_order(self, **kwargs: Any) -> None:
+        self.send(
+            dict(
+                id=self.new_id(),
+                method="order",
+                **kwargs,
+            )
+        )
+
     async def run(self) -> None:
         self._write_task = asyncio.create_task(self.write_loop())
         try:

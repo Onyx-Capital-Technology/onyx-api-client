@@ -265,6 +265,22 @@ Subsequent events will be incremental updates to the user dashboards.
 }
 ```
 
+* a Spread takes the following form
+```json
+{
+  "front": "<string>",
+  "back": "<string>",
+}
+```
+* a Butterfly takes the following form
+```json
+{
+  "front": "<string>",
+  "middle": "<string>",
+  "back": "<string>",
+}
+```
+
 ### Place Order Request
 
 To place an order for a given rfq stream, send the following request
@@ -279,8 +295,11 @@ To place an order for a given rfq stream, send the following request
   "price": "<string>",
   "timestamp_millis": "<unsigned integer>",
   "client_order_id": "<optional string>",
+  "account_id": "<optional string>",
 }
 ```
 
+* The `symbol` is the symbol of the rfq stream
 * The `client_order_id` is optional, if provided it must be unique
 * The `timestamp_millis` is the UTC time when the order was placed by the client, used for rejecting orders that are too old due to network latency.
+* The `account_id` is optional, if provided the order will be placed on the specified account, otherwise the order will be placed on the default account.

@@ -2,7 +2,8 @@ import asyncio
 import json
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from random import choice
 
 import dotenv
 
@@ -17,6 +18,8 @@ class Workflow:
     rfq: list[dict] = field(default_factory=list)
     dashboard: bool = False
     server_info: bool = False
+    last_order: datetime | None = None
+    orders_every: timedelta = timedelta(seconds=10)
 
     def on_response(self, cli: OnyxWebsocketClient, data: dict):
         if data["method"] == "auth":
@@ -55,13 +58,29 @@ class Workflow:
                     )
                     logger.info(
                         "%s - %s - bid %s - ask %s",
-                        rfq["symbol"],
+                        rfq,
                         timestamp.isoformat(),
                         rfq["bid"],
                         rfq["ask"],
                     )
+                    self.maybe_place_order(cli, rfq)
             case "server_info":
                 logger.info("%s", json.dumps(data, indent=2))
+
+    def maybe_place_order(self, cli: OnyxWebsocketClient, rfq: dict):
+        now = datetime.now(timezone.utc)
+        if self.last_order is not None and now - self.last_order < self.orders_every:
+            return
+        self.last_order = now
+        side = choice(["buy", "sell"])
+        other_side = rfq["ask"] if side == "buy" else rfq["bid"]
+        cli.place_order(
+            symbol=rfq["symbol"],
+            side=side,
+            amount=other_side["amount"],
+            price=other_side["price"],
+            timestamp_millis=int(1000 * now.timestamp()),
+        )
 
 
 async def test_websocket(workflow: Workflow):
@@ -75,10 +94,10 @@ if __name__ == "__main__":
     dotenv.load_dotenv()
     logging.basicConfig(level=logging.DEBUG)
     workflow = Workflow(
-        #rfq=[
-        #    dict(symbol="brtz24", size="10"),
-        #    dict(symbol=dict(front="brtu24", back="brtz24"), size=50),
-        #]
-        products=["dub"],
+        rfq=[
+            dict(symbol="brtz24", size="10"),
+            # dict(symbol=dict(front="brtu24", back="brtz24"), size=50),
+        ],
+        # products=["dub"],
     )
     asyncio.get_event_loop().run_until_complete(test_websocket(workflow))
