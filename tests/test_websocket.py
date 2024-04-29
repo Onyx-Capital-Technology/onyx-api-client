@@ -27,12 +27,12 @@ class OnResponse:
             return await self.events.get()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def responses():
     return OnResponse()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 async def cli(responses: OnResponse):
     cli = OnyxWebsocketClient(
         on_response=responses.on_response, on_event=responses.on_event
@@ -54,11 +54,11 @@ async def test_server_info(cli: OnyxWebsocketClient, responses: OnResponse):
     cli.subscribe("server_info")
     msg = await responses.get_response()
     assert msg["method"] == "subscribe"
-    assert msg["message"] == "subscribed to server_info"
+    assert msg["message"] == dict(Message="subscribed to server_info")
     event = await responses.get_event(timeout=10)
     assert event["channel"] == "server_info"
     assert event["message_type"] == 0
     cli.unsubscribe("server_info")
     msg = await responses.get_response()
     assert msg["method"] == "unsubscribe"
-    assert msg["message"] == "unsubscribed from server_info"
+    assert msg["message"] == dict(Message="unsubscribed from server_info")

@@ -14,6 +14,16 @@ lint:				## run linters
 	@poetry run ./lint fix
 
 
+.PHONY: lint-check
+lint-check:			## run linters in check mode
+	@poetry run ./lint
+
+
 .PHONY: test
 test:				## run tests
 	@poetry run pytest
+
+
+.PHONY: outdated
+outdated:			## check for outdated dependencies
+	@poetry show -o -a

@@ -18,7 +18,7 @@ A valid request, that is a request with a valid method, will receive a response 
 {
   "id": "<same as request>",
   "method": "<same as request>",
-  "message": "<string>",
+  "message": "<object | string>",
   "error": true | false
 }
 ```
