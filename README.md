@@ -7,8 +7,11 @@ Rest and websocket API client
 
 ## Websocket JSON Protocol
 
-The websocket API uses JSON for all requests and responses. All requests must
-include
+Onyx websocket API is located at `wss://ws.onyxhub.co/stream/v1`.
+
+The websocket API uses a JSON protocol for all requests and responses.
+
+A client request must be an object which includes
 
 * an `id` string which can be used to correlate requests with responses
 * a `method` string which indicates the type of request
