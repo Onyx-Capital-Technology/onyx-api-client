@@ -27,6 +27,8 @@ if the `error` flag is `true`, the `message` field will contain the error messag
 
 ### Auth Request
 
+Once the websocket connection is established, the client must authenticate with the server by sending an `auth` request.
+Failing to authenticate will result in the server terminating the connection after approximatetly 5 seconds.
 ```json
 {
   "id": "<string>",
@@ -54,14 +56,14 @@ if the `error` flag is `true`, the `message` field will contain the error messag
   }
   ```
 
-* Subscribe to `tickers` channel to receive tickers updates, this example subscribe to all tickers in the `crude` product group
+* Subscribe to `tickers` channel to receive tickers updates, this example subscribe to all tickers in the `ebob` product
   ```json
   {
     "id": "<string>",
     "method": "subscribe",
     "channel": {
       "tickers": {
-        "products": ["brt", "ebob"]
+        "products": ["ebob"]
       }
     }
   }
@@ -76,7 +78,7 @@ if the `error` flag is `true`, the `message` field will contain the error messag
   }
   ```
 
-* Subscribe to an `rfq` (request for quote) stream, only if the user has the required trading permissions.
+* Subscribe to an `rfq` (request for quote) stream, only if the user has the required trading permissions. **CURRENTLY THIS IS AVAILABLE FOR INTERNAL USERS ONLY**.
 
   * `RFQ` for an outright
     ```json
@@ -151,7 +153,7 @@ To unsubscribe from  `rfq` channels, send the following request
 
 The server will send events to the client as thay occur if the client is subscribed to the corresponding channel.
 
-An avent payload is a JSON object with the following schema
+An event payload is a JSON object with the following schema
 
 ```json
 {

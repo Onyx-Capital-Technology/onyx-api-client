@@ -55,8 +55,10 @@ class OnyxWebsocketClient:
             )
         )
 
-    def auth_msg(self) -> dict:
-        return dict(id=self.new_id(), method="auth", token=self.api_token)
+    def auth_msg(self) -> dict | None:
+        if self.api_token:
+            return dict(id=self.new_id(), method="auth", token=self.api_token)
+        return None
 
     def send(self, msg: dict) -> None:
         self.queue.put_nowait(msg)
@@ -87,7 +89,8 @@ class OnyxWebsocketClient:
             async with session.ws_connect(self.ws_url) as ws:
                 self.ws = ws
                 logger.info("connected to websocket")
-                self.send(self.auth_msg())
+                if auth_msg := self.auth_msg():
+                    self.send(auth_msg)
                 async for msg in ws:
                     if msg.type == WSMsgType.TEXT:
                         data = msg.json()
