@@ -1,4 +1,7 @@
 # Onyx API Client
+
+[![build](https://github.com/Onyx-Capital-Technology/onyx-api-client/actions/workflows/build.yml/badge.svg)](https://github.com/Onyx-Capital-Technology/onyx-api-client/actions/workflows/build.yml)
+
 Rest and websocket API client
 
 
