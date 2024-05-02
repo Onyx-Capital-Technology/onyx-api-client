@@ -116,6 +116,20 @@ Failing to authenticate will result in the server terminating the connection aft
     }
     ```
 
+* Subscribe to `product_risk` stream, only if the user has the required trading permissions. **CURRENTLY THIS IS AVAILABLE FOR INTERNAL USERS ONLY**.
+```json
+  {
+    "id": "<string>",
+    "method": "subscribe",
+    "channel": {
+      "product_risk": {
+        "product_symbol": "ebob",
+        "account_id": "account_id"
+      }
+    }
+  }
+  ```
+
 ### Unsubscribe Request
 
 To unsubscribe from  `dashboards` and `server_info` channels, send the following request
