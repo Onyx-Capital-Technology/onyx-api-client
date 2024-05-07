@@ -8,18 +8,19 @@ Rest and websocket API client
 ## Installation & Testing
 
 * Clone this repository
-* Install the dependencies
+* Install the dependencies (it uses `poetry` so it needs toi be installed first)
   ```bash
   make install
   ```
-* Add a `.env` file with the following content
+* Add a `.env` file inside the repository directory with the following content
   ```
   ONYX_API_TOKEN=...
   ```
-* Rune the `test.py` script
+* Run the `test.py` script
   ```bash
-  python test.py
+  poetry run python test.py
   ```
+  If succesful, it should print the server info and the tickers for the `dub` product.
 
 ## Websocket JSON Protocol
 
