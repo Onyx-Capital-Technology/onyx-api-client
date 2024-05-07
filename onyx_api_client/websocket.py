@@ -33,7 +33,7 @@ class OnyxWebsocketClient:
     queue: asyncio.Queue = field(default_factory=asyncio.Queue)
     _task: asyncio.Task | None = None
     _write_task: asyncio.Task | None = None
-    msg_id: int = 0
+    _msg_id: int = 0
 
     def subscribe(self, channel: str, **kwargs: Any) -> None:
         channel_data = {channel: kwargs} if kwargs else channel
@@ -64,8 +64,8 @@ class OnyxWebsocketClient:
         self.queue.put_nowait(msg)
 
     def new_id(self) -> str:
-        self.msg_id += 1
-        return f"msg:{self.msg_id}"
+        self._msg_id += 1
+        return f"msg:{self._msg_id}"
 
     def place_order(self, **kwargs: Any) -> None:
         self.send(
@@ -82,6 +82,7 @@ class OnyxWebsocketClient:
             await self.read_loop()
         finally:
             self._write_task.cancel()
+            self._write_task = None
 
     async def read_loop(self) -> None:
         async with ClientSession() as session:

@@ -5,6 +5,22 @@
 Rest and websocket API client
 
 
+## Installation & Testing
+
+* Clone this repository
+* Install the dependencies
+  ```bash
+  make install
+  ```
+* Add a `.env` file with the following content
+  ```
+  ONYX_API_TOKEN=...
+  ```
+* Rune the `test.py` script
+  ```bash
+  python test.py
+  ```
+
 ## Websocket JSON Protocol
 
 Onyx websocket API is located at `wss://ws.onyxhub.co/stream/v1`.
