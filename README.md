@@ -2,6 +2,7 @@
 
 [![build](https://github.com/Onyx-Capital-Technology/onyx-api-client/actions/workflows/build.yml/badge.svg)](https://github.com/Onyx-Capital-Technology/onyx-api-client/actions/workflows/build.yml)
 
+This repository contains a Python
 Rest and websocket API client
 
 
@@ -127,6 +128,7 @@ Failing to authenticate will result in the server terminating the connection aft
             "front": "brtu24",
             "back": "brtz24",
           },
+          "exchage": "ice",
           "size": 10,
         }
       }
@@ -288,6 +290,7 @@ Subsequent events will be incremental updates to the user dashboards.
   "message": [
     {
       "symbol": "<string/Spread/Butterfly>",
+      "exchange": "ice",
       "product_symbol": "<string>",
       "timestamp_millis": "<integer>",
       "bid": {
@@ -329,6 +332,7 @@ To place an order for a given rfq stream, send the following request
   "id": "<string>",
   "method": "order",
   "symbol": "<string/Spread/Butterfly>",
+  "exchange": "ice" | "cme",
   "side": "buy" | "sell",
   "amount": "<string>",
   "price": "<string>",

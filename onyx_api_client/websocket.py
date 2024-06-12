@@ -87,7 +87,7 @@ class OnyxWebsocketClient:
     async def read_loop(self) -> None:
         async with ClientSession() as session:
             logger.info("connecting with %s", self.ws_url)
-            async with session.ws_connect(self.ws_url) as ws:
+            async with session.ws_connect(self.ws_url, heartbeat=20) as ws:
                 self.ws = ws
                 logger.info("connected to websocket")
                 if auth_msg := self.auth_msg():
