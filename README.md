@@ -112,6 +112,7 @@ Failing to authenticate will result in the server terminating the connection aft
       "channel": {
         "rfq": {
           "symbol": "brtu24",
+          "exchage": "ice",
           "size": 10,
         }
       }
@@ -184,6 +185,7 @@ To unsubscribe from  `rfq` channels, send the following request
       "front": "brtu24",
       "back": "brtz24",
     },
+    "exchage": "ice",
   }
 }
 ```
