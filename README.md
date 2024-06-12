@@ -71,84 +71,98 @@ Failing to authenticate will result in the server terminating the connection aft
 }
 ```
 
-* Subscribe to `server_info` channel to receive server info updates
-  ```json
-  {
-    "id": "<string>",
-    "method": "subscribe",
-    "channel": "server_info",
-  }
-  ```
+#### Subscribe to server_info
 
-* Subscribe to `tickers` channel to receive tickers updates, this example subscribe to all tickers in the `ebob` product
-  ```json
-  {
-    "id": "<string>",
-    "method": "subscribe",
-    "channel": {
-      "tickers": {
-        "products": ["ebob"]
-      }
-    }
-  }
-  ```
-
-* Subscribe to `dashboards` channel to receive dashboards updates, the first update will be the full state of the dashboard, subsequent updates will be incremental updates.
-  ```json
-  {
-    "id": "<string>",
-    "method": "subscribe",
-    "channel":"dashboards"
-  }
-  ```
-
-* Subscribe to an `rfq` (request for quote) stream, only if the user has the required trading permissions. **CURRENTLY THIS IS AVAILABLE FOR INTERNAL USERS ONLY**.
-
-  * `RFQ` for an outright
-    ```json
-    {
-      "id": "<string>",
-      "method": "subscribe",
-      "channel": {
-        "rfq": {
-          "symbol": "brtu24",
-          "exchage": "ice",
-          "size": 10,
-        }
-      }
-    }
-    ```
-  * `RFQ` for a spread
-    ```json
-    {
-      "id": "<string>",
-      "method": "subscribe",
-      "channel": {
-        "rfq": {
-          "symbol": {
-            "front": "brtu24",
-            "back": "brtz24",
-          },
-          "exchage": "ice",
-          "size": 10,
-        }
-      }
-    }
-    ```
-
-* Subscribe to `product_risk` stream, only if the user has the required trading permissions. **CURRENTLY THIS IS AVAILABLE FOR INTERNAL USERS ONLY**.
+Subscribe to `server_info` channel to receive server info updates
 ```json
+{
+  "id": "<string>",
+  "method": "subscribe",
+  "channel": "server_info",
+}
+```
+
+#### Subscribe to tickers
+
+Subscribe to `tickers` channel to receive tickers updates, this example subscribe to all tickers in the `ebob` product
+```json
+{
+  "id": "<string>",
+  "method": "subscribe",
+  "channel": {
+    "tickers": {
+      "products": ["ebob"]
+    }
+  }
+}
+```
+
+#### Subscribe to dashboards
+
+Subscribe to `dashboards` channel to receive dashboards updates, the first update will be the full state of the dashboard, subsequent updates will be incremental updates.
+```json
+{
+  "id": "<string>",
+  "method": "subscribe",
+  "channel":"dashboards"
+}
+```
+
+#### Subscribe to RFQ
+
+**CURRENTLY THIS IS AVAILABLE FOR INTERNAL USERS ONLY**.
+
+Subscribe to an `rfq` (request for quote) stream, only if the user has the required trading permissions.
+
+* `RFQ` for an outright
+  ```json
   {
     "id": "<string>",
     "method": "subscribe",
     "channel": {
-      "product_risk": {
-        "product_symbol": "ebob",
-        "account_id": "account_id"
+      "rfq": {
+        "symbol": "brtu24",
+        "exchage": "ice",
+        "size": 10,
       }
     }
   }
   ```
+* `RFQ` for a spread
+  ```json
+  {
+    "id": "<string>",
+    "method": "subscribe",
+    "channel": {
+      "rfq": {
+        "symbol": {
+          "front": "brtu24",
+          "back": "brtz24",
+        },
+        "exchage": "ice",
+        "size": 10,
+      }
+    }
+  }
+  ```
+
+#### Subscribe to Product Risk
+
+**CURRENTLY THIS IS AVAILABLE FOR INTERNAL USERS ONLY**.
+
+Subscribe to `product_risk` stream, only if the user has the required trading permissions.
+```json
+{
+  "id": "<string>",
+  "method": "subscribe",
+  "channel": {
+    "product_risk": {
+      "product_symbol": "ebob",
+      "account_id": "account_id"
+    }
+  }
+}
+```
 
 ### Unsubscribe Request
 
