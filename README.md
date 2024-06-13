@@ -122,7 +122,7 @@ Subscribe to an `rfq` (request for quote) stream, only if the user has the requi
     "channel": {
       "rfq": {
         "symbol": "brtu24",
-        "exchage": "ice",
+        "exchange": "ice",
         "size": 10,
       }
     }
@@ -139,7 +139,7 @@ Subscribe to an `rfq` (request for quote) stream, only if the user has the requi
           "front": "brtu24",
           "back": "brtz24",
         },
-        "exchage": "ice",
+        "exchange": "ice",
         "size": 10,
       }
     }
@@ -199,7 +199,7 @@ To unsubscribe from  `rfq` channels, send the following request
       "front": "brtu24",
       "back": "brtz24",
     },
-    "exchage": "ice",
+    "exchange": "ice",
   }
 }
 ```
