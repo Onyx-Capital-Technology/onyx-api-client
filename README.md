@@ -9,7 +9,7 @@ Rest and websocket API client
 ## Installation & Testing
 
 * Clone this repository
-* Install the dependencies (it uses `poetry` so it needs toi be installed first)
+* Install the dependencies (it uses `poetry` so it needs to be installed first)
   ```bash
   make install
   ```
