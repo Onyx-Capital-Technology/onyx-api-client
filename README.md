@@ -1,5 +1,8 @@
 # Onyx API Client
 
+> ⚠️ **Warning:** This repository is no longer maintained, please use the new repository [onyx-otc](https://github.com/Onyx-Capital-Technology/onyx-otc) instead.
+
+
 [![build](https://github.com/Onyx-Capital-Technology/onyx-api-client/actions/workflows/build.yml/badge.svg)](https://github.com/Onyx-Capital-Technology/onyx-api-client/actions/workflows/build.yml)
 
 This repository contains a Python
